@@ -14,22 +14,13 @@ class Folder(models.Model):
         on_delete=models.PROTECT,
         related_name='children',
         related_query_name='children',
-    )
-
-
-class Tag(models.Model):
-    name = models.CharField(max_length=128)
-    parent = models.ForeignKey(
-        'self',
-        on_delete=models.PROTECT,
-        related_name='tags',
-        related_query_name='tags',
+        null=True, blank=True,
     )
 
 
 class Picture(models.Model):
+    path = models.CharField(max_length=1024)
     name = models.CharField(max_length=128)
-    s3_key = models.CharField(max_length=512)
     folder = models.ForeignKey(
         Folder,
         on_delete=models.PROTECT,
@@ -37,4 +28,5 @@ class Picture(models.Model):
         related_query_name='pictures',
     )
     datetime = models.DateTimeField()
-    location = gis_models.PointField(geography=True)
+    location = gis_models.PointField(geography=True, null=True, blank=True)
+    exif = models.JSONField()
